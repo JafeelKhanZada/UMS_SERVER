@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const Student = require("../../../controllers/Student");
+const Controller = new Student();
+router.post("/insert", Controller.InsertData);
+router.post("/getData", Controller.GetUser);
+router.post("/update/:id", Controller.UpdateData);
+router.delete("/delete", Controller.DeleteUser);
+router.post("/login", Controller.Login);
+router.post("/update-password", Controller.UpdatePassword);
+module.exports = router;
