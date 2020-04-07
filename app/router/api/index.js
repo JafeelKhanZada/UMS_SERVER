@@ -6,7 +6,8 @@ const Fees = require("./Fees");
 const Student = require("./Student");
 const Employement = require("./Employement");
 const AcademicRecordEmployee = require("./Academic Record Employee");
-const EmployementExperience = require("./Employement Experience");
+const Attendance =require("./Attendance");
+
 module.exports = (app) => {
   app.use("/api/program", Program);
   app.use("/api/batch", Batch);
@@ -16,5 +17,5 @@ module.exports = (app) => {
   app.use("/api/student", Student);
   app.use("/api/employement", Employement);
   app.use("/api/academic_record_employee", AcademicRecordEmployee);
-  app.use("/api/employement_experience", EmployementExperience);
+  app.use("/api/attendance",Attendance);
 };
