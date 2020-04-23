@@ -214,7 +214,7 @@ class Student extends DB {
               } else {
                 return jwt.sign(
                   data,
-                  process.env.secret,
+                  "FUCKINGSECRET",
                   {
                     expiresIn: 60 * 60,
                   },
