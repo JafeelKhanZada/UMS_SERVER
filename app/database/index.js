@@ -1,10 +1,10 @@
 const SQL = require("mysql2");
 class DB {
   constructor() {
-    this.host = "localhost";
-    this.port = 8889;
-    this.username = "root";
-    this.password = "root";
+    this.host = "database-1.cnc9aex3iecv.us-east-2.rds.amazonaws.com";
+    this.port = 3306;
+    this.username = "admin";
+    this.password = "admin123";
     this.dbname = "UMS";
   }
   createConnection = () => {
@@ -13,7 +13,8 @@ class DB {
       user: this.username,
       database: this.dbname,
       port: this.port,
-      password: this.password
+      password: this.password,
+      waitForConnections: true,
     });
 
     return connect;

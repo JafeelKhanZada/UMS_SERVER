@@ -19,7 +19,7 @@ class Student extends DB {
       totalCredit,
       cgpa,
       currentSemester,
-      password
+      password,
     } = req.body;
     return bcrypt.genSalt(10, (err, salt) => {
       if (err) {
@@ -27,7 +27,7 @@ class Student extends DB {
           .json({
             error: true,
             message: "Error In Genrating Salt Insert Data Student!",
-            data: err
+            data: err,
           })
           .status(401);
         next();
@@ -38,7 +38,7 @@ class Student extends DB {
               .json({
                 error: true,
                 message: "Error In Hashing Insert Data Student!",
-                data: error
+                data: error,
               })
               .status(401);
             next();
@@ -50,7 +50,7 @@ class Student extends DB {
                   .json({
                     error: true,
                     message: "Error In Insert Data Student!",
-                    data: ERROR
+                    data: ERROR,
                   })
                   .status(404);
                 next();
@@ -58,7 +58,7 @@ class Student extends DB {
                 res.json({
                   error: false,
                   message: "Student Has Been Added Successfully",
-                  data: result
+                  data: result,
                 });
                 next();
               }
@@ -80,7 +80,7 @@ class Student extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Get Student Data!",
-          data: err
+          data: err,
         });
         next();
       } else {
@@ -94,7 +94,7 @@ class Student extends DB {
             res.json({
               error: true,
               message: "Error Occurs At Get Student Data!",
-              data: error
+              data: error,
             });
             next();
           } else {
@@ -105,14 +105,14 @@ class Student extends DB {
                 totalPage: totalPage,
                 error: false,
                 message: "Data Get Successfully!",
-                data: resulted
+                data: resulted,
               });
               next();
             } else {
               res.json({
                 error: false,
                 message: "No Data Found!",
-                data: resulted
+                data: resulted,
               });
               next();
             }
@@ -125,7 +125,7 @@ class Student extends DB {
     const { id } = req.body;
     let string = new String();
     if (id.length > 1) {
-      id.map(val => (string += `'${val}',`));
+      id.map((val) => (string += `'${val}',`));
       string = string.slice(0, string.length - 1);
     } else {
       string = id[0];
@@ -136,14 +136,14 @@ class Student extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Delete Student!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "Data Deleted Successfully!",
-          data: result.info
+          data: result.info,
         });
         next();
       }
@@ -160,14 +160,14 @@ class Student extends DB {
           res.json({
             error: true,
             message: "Error Occurs At Update Student!",
-            data: err
+            data: err,
           });
           next();
         } else {
           res.json({
             error: false,
             message: "Data Update Successfully!",
-            data: result.info
+            data: result.info,
           });
           next();
         }
@@ -182,7 +182,7 @@ class Student extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Finding Student!",
-          data: err
+          data: err,
         });
         next();
       } else {
@@ -190,7 +190,7 @@ class Student extends DB {
           res.json({
             error: true,
             message: "No Student Exists!",
-            data: []
+            data: [],
           });
           next();
         } else {
@@ -200,7 +200,7 @@ class Student extends DB {
               res.json({
                 error: true,
                 message: "Error in de-Hashing Password!",
-                data: []
+                data: [],
               });
               next();
             } else {
@@ -208,7 +208,7 @@ class Student extends DB {
                 res.json({
                   error: true,
                   message: "Wrong Email or Password!",
-                  data: []
+                  data: [],
                 });
                 next();
               } else {
@@ -216,24 +216,24 @@ class Student extends DB {
                   data,
                   process.env.secret,
                   {
-                    expiresIn: 60 * 60
+                    expiresIn: 60 * 60,
                   },
                   (error, token) => {
                     if (error) {
                       res.json({
                         error: true,
                         message: "Error In Genrating Token!",
-                        data: error
+                        data: error,
                       });
                       next();
                     } else {
                       let tokens = {
-                        token: `Bearer ${token}`
+                        token: `Bearer ${token}`,
                       };
                       res.json({
-                        error: true,
+                        error: false,
                         message: "Login Successfully!",
-                        data: tokens
+                        data: tokens,
                       });
                       next();
                     }
@@ -254,7 +254,7 @@ class Student extends DB {
         res.json({
           error: true,
           message: "Error In Finding User!",
-          data: err
+          data: err,
         });
         next();
       } else {
@@ -262,7 +262,7 @@ class Student extends DB {
           res.json({
             error: false,
             message: "No User Found Against ID!",
-            data: null
+            data: null,
           });
           next();
         } else {
@@ -275,7 +275,7 @@ class Student extends DB {
                 res.json({
                   error: true,
                   message: "Error In User Password!",
-                  data: error
+                  data: error,
                 });
                 next();
               } else {
@@ -283,7 +283,7 @@ class Student extends DB {
                   res.json({
                     error: false,
                     message: "Password Not Matched!",
-                    data: null
+                    data: null,
                   });
                   next();
                 } else {
@@ -292,7 +292,7 @@ class Student extends DB {
                       res.json({
                         error: true,
                         message: "Error In Generating Salt!",
-                        data: saltError
+                        data: saltError,
                       });
                       next();
                     } else {
@@ -304,7 +304,7 @@ class Student extends DB {
                             res.json({
                               error: true,
                               message: "Error In Hashing Password!",
-                              data: saltError
+                              data: saltError,
                             });
                             next();
                           } else {
@@ -312,21 +312,21 @@ class Student extends DB {
                             return this.database.query(
                               UpdateQuery,
                               {
-                                PASSWORD: hashed
+                                PASSWORD: hashed,
                               },
                               (errors, resulted, affects) => {
                                 if (errors) {
                                   res.json({
                                     error: true,
                                     message: "Error In Updating Password!",
-                                    data: errors
+                                    data: errors,
                                   });
                                   next();
                                 } else {
                                   res.json({
                                     error: false,
                                     message: "Password Updated Successfully",
-                                    data: true
+                                    data: true,
                                   });
                                   next();
                                 }

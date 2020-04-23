@@ -5,5 +5,6 @@ class EmployementExperience extends DB {
     this.database = this.createConnection();
     this.getData = this.getData.bind(this);
   }
+  getData = (req, res, next) => {};
 }
 module.exports = EmployementExperience;
