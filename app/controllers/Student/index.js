@@ -6,10 +6,11 @@ class Student extends DB {
     super();
     this.InsertData = this.InsertData.bind(this);
     this.UpdateData = this.UpdateData.bind(this);
-    this.Login = this.Login.bind(this);
+    // this.Login = this.Login.bind(this);
     this.UpdatePassword = this.UpdatePassword.bind(this);
     this.DeleteUser = this.DeleteUser.bind(this);
     this.GetUser = this.GetUser.bind(this);
+    this.GetAll = this.GetAll.bind(this);
     this.database = this.createConnection();
   }
   InsertData = (req, res, next) => {
@@ -20,6 +21,7 @@ class Student extends DB {
       cgpa,
       currentSemester,
       password,
+      email,
     } = req.body;
     return bcrypt.genSalt(10, (err, salt) => {
       if (err) {
@@ -43,7 +45,7 @@ class Student extends DB {
               .status(401);
             next();
           } else {
-            const Query = `INSERT INTO STUDENT (STUDENT_ID,TOTAL_COURSES,TOTAL_CREDIT_HOURS,CGPA,CURRENT_SEMESTER,PASSWORD) VALUES ('${sID}','${totalCourse}','${totalCredit}','${cgpa}','${currentSemester}','${result}')`;
+            const Query = `INSERT INTO STUDENT (STUDENT_ID,TOTAL_COURSES,TOTAL_CREDIT_HOURS,CGPA,CURRENT_SEMESTER,PASSWORD,EMAIL) VALUES ('${sID}','${totalCourse}','${totalCredit}','${cgpa}','${currentSemester}','${result}','${email}')`;
             return this.database.query(Query, (ERROR, result, affected) => {
               if (ERROR) {
                 res
@@ -174,78 +176,7 @@ class Student extends DB {
       }
     );
   };
-  Login = (req, res, next) => {
-    const { id, password } = req.body;
-    const Query = `SELECT * FROM STUDENT WHERE STUDENT_ID=${id}`;
-    return this.database.query(Query, (err, result, affected) => {
-      if (err) {
-        res.json({
-          error: true,
-          message: "Error Occurs At Finding Student!",
-          data: err,
-        });
-        next();
-      } else {
-        if (result.length === 0) {
-          res.json({
-            error: true,
-            message: "No Student Exists!",
-            data: [],
-          });
-          next();
-        } else {
-          const data = { ...result[0] };
-          return bcrypt.compare(password, data.PASSWORD, (err, response) => {
-            if (err) {
-              res.json({
-                error: true,
-                message: "Error in de-Hashing Password!",
-                data: [],
-              });
-              next();
-            } else {
-              if (!response) {
-                res.json({
-                  error: true,
-                  message: "Wrong Email or Password!",
-                  data: [],
-                });
-                next();
-              } else {
-                return jwt.sign(
-                  data,
-                  "FUCKINGSECRET",
-                  {
-                    expiresIn: 60 * 60,
-                  },
-                  (error, token) => {
-                    if (error) {
-                      res.json({
-                        error: true,
-                        message: "Error In Genrating Token!",
-                        data: error,
-                      });
-                      next();
-                    } else {
-                      let tokens = {
-                        token: `Bearer ${token}`,
-                      };
-                      res.json({
-                        error: false,
-                        message: "Login Successfully!",
-                        data: tokens,
-                      });
-                      next();
-                    }
-                  }
-                );
-              }
-            }
-          });
-        }
-      }
-    });
-  };
+
   UpdatePassword = (req, res, next) => {
     const { id, oldPassword, newPassword } = req.body;
     const Query = `SELECT * FROM STUDENT WHERE ID=${id}`;
@@ -345,5 +276,6 @@ class Student extends DB {
       }
     });
   };
+  GetAll = (req, res, next) => {};
 }
 module.exports = Student;

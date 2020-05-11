@@ -1,23 +1,18 @@
-const DB= require("../../database");
+const DB = require("../../database");
 class Teacher extends DB {
- constructor(){
-     super();
-     this.database=this.createConnection();
-     this.InsertTeacher=this.InsertTeacher.bind(this);
-     this.GetTeacher=this.GetTeacher.bind(this);
-     this.UpdateTeacher=this.UpdateTeacher.bind(this);
-     this.DeleteTeacher=this.DeleteTeacher.bind(this);
- }
- InsertTeacher=(req,res,next)=>{
-     const{
-              EMPLOYEE_ID,
-              DESIGNATION,
-              PASSWORD,
-              AOI,
-     }=req.body;
-     const query =`INSERT INTO TEACHERS(EMPLOYEe_ID,DESIGNATION,PASSWORD,AOI) VALUES('${EMPLOYEE_ID}','${DESIGNATION}','${PASSWORD}','${AOI}')`;
-     this.database.query(query, (err, result, affected) => {
-     if (err) {
+  constructor() {
+    super();
+    this.database = this.createConnection();
+    this.InsertTeacher = this.InsertTeacher.bind(this);
+    this.GetTeacher = this.GetTeacher.bind(this);
+    this.UpdateTeacher = this.UpdateTeacher.bind(this);
+    this.DeleteTeacher = this.DeleteTeacher.bind(this);
+  }
+  InsertTeacher = (req, res, next) => {
+    const { EMPLOYEE_ID, DESIGNATION, AOI } = req.body;
+    const query = `INSERT INTO TEACHERS(EMPLOYEE_ID,DESIGNATION,AOI) VALUES('${EMPLOYEE_ID}','${DESIGNATION}','${AOI}')`;
+    this.database.query(query, (err, result, affected) => {
+      if (err) {
         res.json({
           error: true,
           message: "Error Occurs At Insert Teacher!",
@@ -33,8 +28,8 @@ class Teacher extends DB {
         next();
       }
     });
- };
- GetTeacher = (req, res, next) => {
+  };
+  GetTeacher = (req, res, next) => {
     const { page, pageSizes, id } = req.body;
     const pageSize = page * pageSizes;
     const offset = (page - 1) * pageSizes;
@@ -52,9 +47,9 @@ class Teacher extends DB {
       } else {
         let totalPage = result[0].total / pageSizes;
         totalPage = Math.ceil(totalPage);
-        const Query = `SELECT * FROM TEACHERS  ${
-          id !== null ? "WHERE S.ID =" + id : ""
-        } ORDER BY ID LIMIT ${pageSize} OFFSET ${offset}`;
+        const Query = `SELECT T.ID AS ID, T.DESIGNATION AS DESIGNATION, T.AOI AS AREAOFINTREST, S.ID AS EID, S.GENDER AS GENDER, S.FIRST_NAME AS FIRSTNAME,S.LAST_NAME AS LASTNAME, S.NATIONALITY AS NATIONALITY, S.CNIC AS CNIC, S.RELIGON AS RELIGON, S.POSTAL_CODE AS POSTCODE, S.CITY AS CITY, S.STREETNO AS STREETNO, S.HOUSENO AS HOUSENO, S.STATE AS STATE, S.COUNTRY AS COUNTRY, S.DOB AS DOB, S.JOINING_DATE AS JOININGDATE, S.PHONENUMBER AS PHONENUMBER, P.NAME AS PROGRAMNAME, P.TOTAL_FEES AS TOTALFEES, P.DURATION AS DURATION, P.TOTAL_CREDIT_HOURS AS CREDITHOURS, P.ID AS PROGRAMID FROM TEACHERS T JOIN EMPLOYEMENT S ON S.ID=T.EMPLOYEE_ID JOIN PROGRAM P ON P.ID=S.PROGRAM_ID   ${
+          id !== null ? "WHERE T.ID =" + id : ""
+        } ORDER BY T.ID LIMIT ${pageSize} OFFSET ${offset}`;
         return this.database.query(Query, (error, resulted, affect) => {
           if (error) {
             res.json({
@@ -115,7 +110,7 @@ class Teacher extends DB {
         next();
       }
     });
-  }; 
+  };
   UpdateTeacher = (req, res, next) => {
     const { id } = req.params;
     const query = `UPDATE TEACHERS SET ? WHERE ID=${id}`;
@@ -138,4 +133,4 @@ class Teacher extends DB {
     });
   };
 }
-module.exports= Teacher;
+module.exports = Teacher;

@@ -6,6 +6,7 @@ router.post("/insert", Controller.InsertData);
 router.post("/getData", Controller.GetUser);
 router.post("/update/:id", Controller.UpdateData);
 router.delete("/delete", Controller.DeleteUser);
-router.post("/login", Controller.Login);
+// router.post("/login", Controller.Login);
 router.post("/update-password", Controller.UpdatePassword);
+router.get("/getallStudent", Controller.GetAll);
 module.exports = router;

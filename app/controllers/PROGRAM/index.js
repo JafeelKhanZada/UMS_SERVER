@@ -16,14 +16,14 @@ class Program extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Insert Program!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "Data Inserted Successfully!",
-          data: result.info
+          data: result.info,
         });
         next();
       }
@@ -41,21 +41,21 @@ class Program extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Get Program Data!",
-          data: err
+          data: err,
         });
         next();
       } else {
         let totalPage = result[0].total / pageSizes;
         totalPage = Math.ceil(totalPage);
         const Query = `SELECT * FROM PROGRAM ${
-          id !== null ? "WHERE ID =" + id : ""
+          id !== null ? " WHERE ID =" + id : ""
         } ORDER BY ID LIMIT ${pageSize} OFFSET ${offset}`;
         return this.database.query(Query, (error, resulted, affect) => {
           if (error) {
             res.json({
               error: true,
               message: "Error Occurs At Get Program Data!",
-              data: error
+              data: error,
             });
             next();
           } else {
@@ -66,14 +66,14 @@ class Program extends DB {
                 totalPage: totalPage,
                 error: false,
                 message: "Data Get Successfully!",
-                data: resulted
+                data: resulted,
               });
               next();
             } else {
               res.json({
                 error: false,
                 message: "No Data Found!",
-                data: resulted
+                data: resulted,
               });
               next();
             }
@@ -86,7 +86,7 @@ class Program extends DB {
     const { id } = req.body;
     let string = new String();
     if (id.length > 1) {
-      id.map(val => (string += `'${val}',`));
+      id.map((val) => (string += `'${val}',`));
       string = string.slice(0, string.length - 1);
     } else {
       string = id[0];
@@ -97,14 +97,14 @@ class Program extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Delete Program!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "Data Deleted Successfully!",
-          data: result.info
+          data: result.info,
         });
         next();
       }
@@ -118,14 +118,14 @@ class Program extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Update Program!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "Data Update Successfully!",
-          data: result.info
+          data: result.info,
         });
         next();
       }

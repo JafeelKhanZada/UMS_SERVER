@@ -9,25 +9,29 @@ class Enrolement extends DB {
     this.database = this.createConnection();
   }
   InsertEnroll = (req, res, next) => {
-    const { 
-        COURSE_ID,
-        SECTION_ID,  
-        IS_OFFER ,
+    const {
+      COURSE_ID,
+      SECTION_ID,
+      IS_OFFER,
+      TEACHER_ID,
+      SEMESTER_ID,
     } = req.body;
-    const Query = `INSERT INTO ENROLEMENT (COURSE_ID,SECTION_ID,IS_OFFER) VALUES('${COURSE_ID}','${SECTION_ID}','${IS_OFFER}')`;
+    const Query = `INSERT INTO ENROLEMENT (COURSE_ID,SECTION_ID,TEACHER_ID,SEMESTER_ID,IS_OFFER) VALUES('${COURSE_ID}','${SECTION_ID}','${TEACHER_ID}','${SEMESTER_ID}','${
+      IS_OFFER === "true" ? 1 : 0
+    }')`;
     return this.database.query(Query, (err, result, affected) => {
       if (err) {
         res.json({
           error: true,
           message: "Error Occurs At Insert ENROLEMENT!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "ENROLEMENT Inserted Successfully!",
-          data: result
+          data: result,
         });
         next();
       }
@@ -45,7 +49,7 @@ class Enrolement extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Get ENROLEMENT Data!",
-          data: err
+          data: err,
         });
         next();
       } else {
@@ -59,7 +63,7 @@ class Enrolement extends DB {
             res.json({
               error: true,
               message: "Error Occurs At ENROLEMENT Data!",
-              data: error
+              data: error,
             });
             next();
           } else {
@@ -70,14 +74,14 @@ class Enrolement extends DB {
                 totalPage: totalPage,
                 error: false,
                 message: "ENROLEMENT Get Successfully!",
-                data: resulted
+                data: resulted,
               });
               next();
             } else {
               res.json({
                 error: false,
                 message: "No ENROLEMENT Found!",
-                data: resulted
+                data: resulted,
               });
               next();
             }
@@ -89,29 +93,33 @@ class Enrolement extends DB {
   UpdateEnroll = (req, res, next) => {
     const { id } = req.params;
     const Query = `UPDATE ENROLEMENT SET ? WHERE ID=${id}`;
-    return this.database.query(Query, { ...req.body }, (err, result,effect) => {
-      if (err) {
-        res.json({
-          error: true,
-          message: "Error Occurs At Update ENROLEMENT!",
-          data: err
-        });
-        next();
-      } else {
-        res.json({
-          error: false,
-          message: "Data ENROLEMENT Successfully!",
-          data: result.info
-        });
-        next();
+    return this.database.query(
+      Query,
+      { ...req.body },
+      (err, result, effect) => {
+        if (err) {
+          res.json({
+            error: true,
+            message: "Error Occurs At Update ENROLEMENT!",
+            data: err,
+          });
+          next();
+        } else {
+          res.json({
+            error: false,
+            message: "Data ENROLEMENT Successfully!",
+            data: result.info,
+          });
+          next();
+        }
       }
-    });
+    );
   };
   DeleteEnroll = (req, res, next) => {
     const { id } = req.body;
     let string = new String();
     if (id.length > 1) {
-      id.map(val => (string += `'${val}',`));
+      id.map((val) => (string += `'${val}',`));
       string = string.slice(0, string.length - 1);
     } else {
       string = id[0];
@@ -122,14 +130,14 @@ class Enrolement extends DB {
         res.json({
           error: true,
           message: "Error Occurs At Delete ENROLEMENT!",
-          data: err
+          data: err,
         });
         next();
       } else {
         res.json({
           error: false,
           message: "ENROLEMENT Deleted Successfully!",
-          data: result.info
+          data: result.info,
         });
         next();
       }

@@ -6,4 +6,5 @@ router.post("/insertSamester", Controller.InsertSamester);
 router.post("/getSamester", Controller.GetSamester);
 router.post("/updateSamester/:id", Controller.UpdateSamester);
 router.post("/deleteSamester", Controller.DeleteSamester);
+router.get("/getSemesterBySectionId/:id", Controller.getSemesterBySectionId);
 module.exports = router;
