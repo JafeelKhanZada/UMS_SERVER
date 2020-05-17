@@ -1,0 +1,2 @@
+(this.webpackJsonpums=this.webpackJsonpums||[]).push([[29],{593:function(e,n,t){"use strict";t.r(n);var s=t(0),u=t.n(s);n.default=function(){return u.a.createElement("div",null,"helloo Teacher")}}}]);
+//# sourceMappingURL=29.43056caa.chunk.js.map

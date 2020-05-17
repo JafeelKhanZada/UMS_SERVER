@@ -1,0 +1,1 @@
+{"version":3,"sources":["js/components/Teacher/index.js"],"names":["Teacher"],"mappings":"6FAAA,2BASeA,UARD,WACV,OACI","file":"static/js/29.43056caa.chunk.js","sourcesContent":["import React from 'react';\nconst Teacher=()=>{\n    return(\n        <div>\n            helloo Teacher\n        </div>\n\n    );\n}\nexport default Teacher;"],"sourceRoot":""}

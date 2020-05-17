@@ -1,5 +1,6 @@
 const cluster = require("cluster");
 const cpu = require("os").cpus();
+const path = require("path");
 if (cluster.isMaster) {
   for (let i = 0; i < cpu.length; i++) {
     cluster.fork();
@@ -12,9 +13,9 @@ if (cluster.isMaster) {
   const API = require("./router/api");
   middleware(app);
   API(app);
-  app.get("/", (req, res, next) => {
-    res.send("Working");
-    next();
+  app.use(express.static(path.resolve(__dirname, "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
   });
   app.listen(PORT, (req, res, next) => {
     console.log(`APP IS WORKING ON PORT # ${PORT}`);
