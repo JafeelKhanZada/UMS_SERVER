@@ -35,7 +35,7 @@ class Admin extends DB {
     const offset = (page - 1) * pageSizes;
     const query = `SELECT count(*) as total FROM ADMIN ${
       id !== null ? "WHERE ID =" + id : ""
-    }`;
+      }`;
     return this.database.query(query, (err, result, affected) => {
       if (err) {
         res.json({
@@ -47,9 +47,9 @@ class Admin extends DB {
       } else {
         let totalPage = result[0].total / pageSizes;
         totalPage = Math.ceil(totalPage);
-        const Query = `SELECT * FROM ADMIN ${
-          id !== null ? " WHERE ID =" + id : ""
-        } ORDER BY ID LIMIT ${pageSize} OFFSET ${offset}`;
+        const Query = `SELECT * FROM ADMIN A JOIN EMPLOYEMENT E ON A.EMPLOYEE_ID=E.ID JOIN PROGRAM D ON A.DEPARTMENT_ID=D.ID JOIN AUTHENTICATION AT ON AT.USER_ID=E.ID  ${
+          id !== null ? " WHERE A.ID =" + id + "AT.ROLL_ID=2" : "WHERE AT.ROLL_ID=2"
+          } ORDER BY A.ID LIMIT ${pageSize} OFFSET ${offset}`;
         return this.database.query(Query, (error, resulted, affect) => {
           if (error) {
             res.json({

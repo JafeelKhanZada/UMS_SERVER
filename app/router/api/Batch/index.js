@@ -6,4 +6,5 @@ router.post("/insert", Controller.InsertBatch);
 router.post("/getBatch", Controller.GetBatch);
 router.post("/update/:id", Controller.UpdateBatch);
 router.post("/delete", Controller.DeleteBatch);
+router.post("/GetBatchByProgramID", Controller.GetBatchByProgramID)
 module.exports = router;

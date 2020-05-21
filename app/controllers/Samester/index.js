@@ -7,34 +7,58 @@ class Samester extends DB {
     this.GetSamester = this.GetSamester.bind(this);
     this.UpdateSamester = this.UpdateSamester.bind(this);
     this.DeleteSamester = this.DeleteSamester.bind(this);
-    this.getSemesterBySectionId = this.getSemesterBySectionId.bind(this);
+    this.getSemesterByBatchID = this.getSemesterByBatchID.bind(this);
   }
-  getSemesterBySectionId = (req, res, next) => {
-    const query = `CALL GET_SECTION_BY_SEMESTER(${req.params.id})`;
-    return this.database.query(query, (error, resulted, affect) => {
-      if (error) {
+  getSemesterByBatchID = (req, res, next) => {
+    const { page, pageSizes, id, bID } = req.body;
+    const pageSize = page * pageSizes;
+    const offset = (page - 1) * pageSizes;
+    const query = `SELECT count(*) as total FROM SEMESTER ${
+      id !== null ? "WHERE ID =" + id : ""
+      }`;
+    return this.database.query(query, (err, result, affected) => {
+      if (err) {
         res.json({
           error: true,
-          message: "Error Occurs At Get SeMESTER Data!",
-          data: error,
+          message: "Error Occurs At Get SAMESTER Data!",
+          data: err,
         });
         next();
       } else {
-        if (resulted.length > 0) {
-          res.json({
-            error: false,
-            message: " SeMESTER Data Get Successfully!",
-            data: resulted[0],
-          });
-          next();
-        } else {
-          res.json({
-            error: false,
-            message: "NO SEMESTER Data Found!",
-            data: resulted,
-          });
-          next();
-        }
+        let totalPage = result[0].total / pageSizes;
+        totalPage = Math.ceil(totalPage);
+        const Query = `SELECT S.TOTAL_STUDENT AS TOTAL_STUDENT, B.BATCH_CODE AS CODE, S.SEMESTER_CODE AS SEMESTER FROM UMS.SEMESTER S JOIN BATCH B ON B.ID=S.BATCH_ID JOIN PROGRAM P ON P.ID=B.PROGRAM_ID  ${
+          id !== null ? "WHERE S.ID =" + id + "AND P.ID=" + bID : "WHERE P.ID=" + bID
+          } ORDER BY S.ID LIMIT ${pageSize} OFFSET ${offset}`;
+        return this.database.query(Query, (error, resulted, affect) => {
+          if (error) {
+            res.json({
+              error: true,
+              message: "Error Occurs At Get SAMESTER Data!",
+              data: error,
+            });
+            next();
+          } else {
+            if (resulted.length > 0) {
+              res.json({
+                totalRecord: result[0].total,
+                currentPage: page,
+                totalPage: totalPage,
+                error: false,
+                message: " SAMESTER Data Get Successfully!",
+                data: resulted,
+              });
+              next();
+            } else {
+              res.json({
+                error: false,
+                message: "NO SAMESTER Data Found!",
+                data: resulted,
+              });
+              next();
+            }
+          }
+        });
       }
     });
   };
@@ -65,7 +89,7 @@ class Samester extends DB {
     const offset = (page - 1) * pageSizes;
     const query = `SELECT count(*) as total FROM SEMESTER ${
       id !== null ? "WHERE ID =" + id : ""
-    }`;
+      }`;
     return this.database.query(query, (err, result, affected) => {
       if (err) {
         res.json({
@@ -79,7 +103,7 @@ class Samester extends DB {
         totalPage = Math.ceil(totalPage);
         const Query = `SELECT * FROM SEMESTER  ${
           id !== null ? "WHERE S.ID =" + id : ""
-        } ORDER BY ID LIMIT ${pageSize} OFFSET ${offset}`;
+          } ORDER BY ID LIMIT ${pageSize} OFFSET ${offset}`;
         return this.database.query(Query, (error, resulted, affect) => {
           if (error) {
             res.json({

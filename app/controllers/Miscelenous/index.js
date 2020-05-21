@@ -9,7 +9,8 @@ class Miscelenous extends DB {
     const query = `SELECT  (SELECT COUNT(*) FROM STUDENT) AS STUDENT,
     (SELECT COUNT(*) FROM EMPLOYEMENT) AS EMPLOYEE,
     (SELECT COUNT(*) FROM TEACHERS) AS TEACHER,
-    (SELECT COUNT(*) FROM ADMIN) AS ADMIN;`;
+    (SELECT COUNT(*) FROM ADMIN) AS ADMIN,
+    (SELECT COUNT(*) FROM PROGRAM) AS PROGRAM;`;
     return this.database.query(query, (error, resulted, affect) => {
       if (error) {
         res.json({
